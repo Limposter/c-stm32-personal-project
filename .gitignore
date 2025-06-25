@@ -1,12 +1,41 @@
-/Debug/
-/Release/
-/.build/
-*.ioc
-*.log
-*.launch
-*.settings/
+# STM32CubeIDE Project Files (Eclipse 기반)
+.project
+.cproject
+.settings/
 .metadata/
+
+# Build artifacts
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.log
+*.tmp
+
+# Build directories
+build/
+Debug/
+Release/
+
+# Generated system files
+syscalls.c
+system_stm32f1xx.c
+startup_stm32f103xx.s
+
+# IDE launch configs
+*.launch
+
+# OS-specific
 .DS_Store
 Thumbs.db
+
+# Backup files
 *~
 *.swp
+*.bak
+
+# CubeMX-generated but redundant
+MX_*
