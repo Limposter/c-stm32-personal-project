@@ -24,6 +24,7 @@ UART : FT232rl (USB to UART)
 Core
 > Src
 >>> main.c : 각 Task 로직 및 UART/Button 수신 로직
+
 > Lib
 >>> Inc : SSD1306 및 Sht31 헤더
 >>> Src : SSD1306 및 Sht31 소스코드
