@@ -3,12 +3,12 @@
 이 프로젝트는 STM32F103C8T6 보드와 FreeRTOS를 기반으로 온습도 센서(SHT31)의 데이터를 읽고,  
 OLED(SSD1306)에 실시간 출력하며, UART 명령과 버튼으로 제어하는 환경 모니터링 시스템입니다.
 
-MCU  : STM32F103C8T6
-RTOS : FreeRTOS
-센서 : SHT31 온습도 센서 (I2C 통신)
-OLED : SSD1306
-UART : FT232rl (USB to UART)
-개발 환경 : STM32CubeIDE
+- MCU  : STM32F103C8T6
+- RTOS : FreeRTOS
+- 센서 : SHT31 온습도 센서 (I2C 통신)
+- OLED : SSD1306
+- UART : FT232rl (USB to UART)
+- 개발 환경 : STM32CubeIDE
 
 ---
 기능 요약
