@@ -21,11 +21,12 @@ OLED(SSD1306)에 실시간 출력하며, UART 명령과 버튼으로 제어하�
 ---
 주요 구조
 ---
-Core
-> Src
+myProject
+>Core
+>> Src
 >>> main.c : 각 Task 로직 및 UART/Button 수신 로직
 
-> Lib
+>> Lib
 >>> Inc : SSD1306 및 Sht31 헤더
 
 >>> Src : SSD1306 및 Sht31 소스코드
