@@ -19,25 +19,25 @@ OLED(SSD1306)에 실시간 출력하며, UART 명령과 버튼으로 제어하�
 - 온습도 값이 임계치 초과 시 LED 및 UART 메세지 경고
 ---
  
-HAL_UART_RxCpltCallback  : UART명령 수신 및 Uart Task에 queue전송
+- HAL_UART_RxCpltCallback → UART명령 수신 및 Uart Task에 queue전송
 
 
-Uart_startTask  : Sensor_startTask를 Resume 또는 Suspend
-
----
-Sensor_startTask  : 센서값 수신 및 Oled Task에 queue전송
-
-
-Oled_startTask  : Oled화면 출력 / display mode구분 / 센서값 임계치 초과 시 Warning Task에 queue전송
+- Uart_startTask → Sensor_startTask를 Resume 또는 Suspend
 
 ---
-HAL_GPIO_EXTI_Callback  : Button 입력 수신 및 Button Task에 queue전송
+- Sensor_startTask → 센서값 수신 및 Oled Task에 queue전송
 
 
-Button_startTask  : Oled Task로 queue 전송(display mode 변경)
+- Oled_startTask → Oled화면 출력 / display mode구분 / 센서값 임계치 초과 시 Warning Task에 queue전송
+
+---
+- HAL_GPIO_EXTI_Callback → Button 입력 수신 및 Button Task에 queue전송
 
 
-Warining_startTask  : 조건 만족 시 Led on
+- Button_startTask → Oled Task로 queue 전송(display mode 변경)
+
+
+- Warining_startTask → 조건 만족 시 Led on
 
 
 ---
