@@ -92,10 +92,10 @@ void Warning_startTask(void const * argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){  //xshell_input_interrupt
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){               //xshell_input_interrupt
 	if(huart->Instance==USART1){
 		if(rx_input=='\r' || rx_input == '\n'){
-			 rx_buffer[rx_index]='\0';           // this is the main item : if delete it, error
+			 rx_buffer[rx_index]='\0';                                 // this is the main item : if delete it, error
 
 			uint8_t uart_cmd=0;
 			if(strcmp((char*)rx_buffer, "start")==0){
@@ -121,7 +121,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){  //xshell_input_interru
 	HAL_UART_Receive_IT(&huart1, &rx_input, 1);
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){     // switch_iterrupt
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){                                           // switch_iterrupt
 	if(GPIO_Pin == GPIO_PIN_5){
 		uint8_t button_cmd=1;
 		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -486,7 +486,6 @@ void Sensor_startTask(void const * argument)
   {
 	  HAL_StatusTypeDef ret = SHT31_ReadTempHum(&hi2c2, &temperature, &humidity);
 
-
 	  if (ret == HAL_OK){
 		  xQueueSend(temp_data_QueueHandle, &temperature, 0);
 		  xQueueSend(humi_data_QueueHandle, &humidity, 0);
@@ -495,7 +494,6 @@ void Sensor_startTask(void const * argument)
 		  const char *msg = "SHT31 Read Error\r\n";
 		  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), HAL_MAX_DELAY);
 	  }
-
 	  osDelay(2000);
   }
   /* USER CODE END 5 */
@@ -540,30 +538,30 @@ void OLED_startTask(void const * argument)
 		  case 0:
 			  snprintf(line, sizeof(line), "Temp: %.2f C", temperature);
 			  SSD1306_GotoXY(0, 0);
-			  SSD1306_Puts(line, &Font_7x10, 1);
+			  SSD1306_Puts(line, &Font_11x18, 1);
 			  snprintf(line, sizeof(line), "Humi: %.2f %%", humidity);
 			  SSD1306_GotoXY(0, 20);
-			  SSD1306_Puts(line, &Font_7x10, 1);
+			  SSD1306_Puts(line, &Font_11x18, 1);
 			  break;
 
 		  case 1:
 			  snprintf(line, sizeof(line), "Temp: %.2f C", temperature);
 			  SSD1306_GotoXY(0, 0);
-			  SSD1306_Puts(line, &Font_7x10, 1);
+			  SSD1306_Puts(line, &Font_11x18, 1);
 			  break;
 
 		  case 2:
 			  snprintf(line, sizeof(line), "Humi: %.2f %%", humidity);
 			  SSD1306_GotoXY(0, 0);
-			  SSD1306_Puts(line, &Font_7x10, 1);
+			  SSD1306_Puts(line, &Font_11x18, 1);
 			  break;
 		  }
 
-		  if(temperature >= 29 || temperature <= 0){
+		  if(temperature >= 30 || temperature <= 0){
 			  uint8_t warning_cmd = 1;
 			  xQueueSend(temp_warning_queueHandle, &warning_cmd, portMAX_DELAY);
 		  }
-		  if(humidity >= 70 || humidity <= 30){
+		  if(humidity >= 65 || humidity <= 30){
 			  uint8_t warning_cmd = 1;
 			  xQueueSend(humi_warning_queueHandle, &warning_cmd, portMAX_DELAY);
 		  }
@@ -573,10 +571,10 @@ void OLED_startTask(void const * argument)
 	  else {
 		snprintf(line, sizeof(line), "Temp: 0.00");
 		SSD1306_GotoXY(0, 0);
-		SSD1306_Puts(line, &Font_7x10, 1);
+		SSD1306_Puts(line, &Font_11x18, 1);
 		snprintf(line, sizeof(line), "Humi: 0.00");
 		SSD1306_GotoXY(0, 20);
-		SSD1306_Puts(line, &Font_7x10, 1);
+		SSD1306_Puts(line, &Font_11x18, 1);
 	  }
 	  SSD1306_UpdateScreen();
 	  osDelay(2000);
@@ -609,7 +607,6 @@ void Button_startTask(void const * argument)
 		  HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 10);
 
 		  taskYIELD();
-
 	  }
   }
   /* USER CODE END Button_startTask */
@@ -635,13 +632,11 @@ void Uart_startTask(void const * argument)
     		char *msg = "sensor start\r\n";
 			HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 100);
     		vTaskResume(Sensor_TaskHandle);
-
     	}
     	else if(uart_cmd_rx==2){
     		char *msg = "sensor stop\r\n";
 			HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 100);
     		vTaskSuspend(Sensor_TaskHandle);
-
     	}
     }
 
@@ -665,8 +660,9 @@ void Warning_startTask(void const * argument)
   for(;;)
   {
 	 if (xQueueReceive(temp_warning_queueHandle, &temp_warning_cmd, 0) == pdPASS){
-		 HAL_UART_Transmit(&huart1, (uint8_t*)"temp warning\r\n", 21, 10);
 		 if (temp_warning_cmd == 1){
+			 char *msg = "temp warning\r\n";
+			 HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 10);
 			 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);  // temp warning on
 		 }
 	 }
@@ -675,8 +671,9 @@ void Warning_startTask(void const * argument)
 	 }
 
 	 if (xQueueReceive(humi_warning_queueHandle, &humi_warning_cmd, 0) == pdPASS){
-		 HAL_UART_Transmit(&huart1, (uint8_t*)"humi warning\r\n", 21, 10);
 		 if (humi_warning_cmd == 1){
+			 char *msg = "humi warning\r\n";
+			 HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 10);
 			 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);  // humi warning on
 		 }
 	 }
